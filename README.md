@@ -1,33 +1,48 @@
-# GitStandup Chrome Extension v2
+# GitStandup
 
-A Manifest V3 Chrome extension that:
-- stores your GitHub token and Gemini API key locally in encrypted form using a user-provided passphrase
-- fetches your GitHub commit activity for a selected date
-- maps commits to associated PRs where possible
-- distinguishes merged PR work, open PR work, direct default-branch work, and uncategorized commits
-- lets you add manual extra context
-- generates a structured standup draft with the Gemini API
+<img width="300" height="400" alt="GitStandup UI" src="https://github.com/user-attachments/assets/069a419a-3047-449b-9c24-2deac275c3e9" />
 
-## Load in Chrome
+Turn your daily GitHub activity into a clear, human-sounding standup draft in seconds.
+
+## Why GitStandup
+- Converts raw commits and PR activity into readable updates
+- Separates completed vs in-progress work
+- Includes manual context for non-code tasks
+- Outputs polished markdown ready to post
+
+## How It Works
+1. Select a date
+2. Fetch GitHub activity (commits + PR/review signals)
+3. Normalize and classify work
+4. Generate standup draft with Gemini
+
+## Quick Start
 1. Open `chrome://extensions`
 2. Enable **Developer mode**
 3. Click **Load unpacked**
-4. Select this folder
+4. Select this folder (or `dist/`)
 
-## Required secrets
+## Required Inputs
 - GitHub username
-- GitHub personal access token (repo read scope recommended for private repos)
+- GitHub personal access token
 - Gemini API key
-- A passphrase you choose for local encryption
+- Master passphrase (for local encryption)
+
+Recommended GitHub token access:
+- Private repo read access (if you want private/org work included)
+- Org SSO authorization (for org-owned private repos)
+
+## Security
+- Secrets are encrypted locally using `AES-GCM`
+- Encryption key is derived from your passphrase via `PBKDF2`
+- Encrypted payload is stored in `chrome.storage.local`
+
+## Project Structure
+- `manifest.json` — MV3 extension config
+- `popup.html` — popup UI
+- `styles.css` — visual design
+- `popup.js` — crypto, GitHub fetch, classification, Gemini generation
 
 ## Notes
-- Secrets are encrypted with AES-GCM using a key derived from your passphrase via PBKDF2.
-- If you forget the passphrase, the extension cannot decrypt the saved secrets.
-- This is client-side encryption inside the extension. It protects saved values at rest in `chrome.storage.local`, but it is not equivalent to hardware-backed secure storage.
-
-## Recommended next upgrades
-- repo filter UI
-- week range support
-- Slack export
-- PR diff summarization
-- better today/blockers inference
+- GitHub may show private contribution counts even when API details are restricted by token access.
+- If no activity appears, verify token scopes and org SSO permissions.
