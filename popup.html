@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitStandup</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <header class="hero">
+        <div>
+          <p class="eyebrow">GitHub → Standup</p>
+          <h1>GitStandup</h1>
+          <p class="subcopy">Turn daily GitHub activity into a polished standup draft.</p>
+        </div>
+        <div class="status-pill" id="unlockStatus">Locked</div>
+      </header>
+
+      <section class="card settings-card">
+        <div class="section-header">
+          <div>
+            <h2>Secrets & Profile</h2>
+            <p>Stored locally in encrypted form with your passphrase.</p>
+          </div>
+        </div>
+        <div class="grid two">
+          <label>
+            <span>GitHub username</span>
+            <input id="githubUsername" type="text" placeholder="octocat" autocomplete="off" />
+          </label>
+          <label>
+            <span>Gemini model</span>
+            <select id="geminiModel">
+              <option value="gemini-2.0-flash-lite" selected>gemini-2.0-flash-lite</option>
+              <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+              <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
+              <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+              <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+            </select>
+          </label>
+        </div>
+        <div class="grid one">
+          <label>
+            <span>GitHub personal access token</span>
+            <input id="githubToken" type="password" placeholder="ghp_... or github_pat_..." autocomplete="off" />
+          </label>
+          <label>
+            <span>Gemini API key</span>
+            <input id="geminiKey" type="password" placeholder="AIza..." autocomplete="off" />
+          </label>
+          <label>
+            <span>Master passphrase</span>
+            <input id="passphrase" type="password" placeholder="Used to encrypt/decrypt local secrets" autocomplete="off" />
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="saveSecretsBtn" class="btn primary">Save encrypted</button>
+          <button id="unlockBtn" class="btn secondary">Unlock secrets</button>
+          <button id="clearSecretsBtn" class="btn ghost">Clear saved data</button>
+        </div>
+        <p class="helper">Tip: create a GitHub token with repo read access for private repositories.</p>
+      </section>
+
+      <section class="card generator-card">
+        <div class="section-header">
+          <div>
+            <h2>Generate standup</h2>
+            <p>PR-aware grouping with extra context for higher-quality drafts.</p>
+          </div>
+        </div>
+        <div class="grid two">
+          <label>
+            <span>Date</span>
+            <input id="standupDate" type="date" />
+          </label>
+          <label>
+            <span>Tone</span>
+            <select id="tone">
+              <option value="engineering">Engineering</option>
+              <option value="concise">Concise</option>
+              <option value="manager-friendly">Manager-friendly</option>
+              <option value="founder-update">Founder update</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Extra work context</span>
+          <textarea id="extraContext" rows="4" placeholder="Add work that may not show up clearly in commits: debugging, meetings, coordination, reviews, research, blocker handling, deployments, etc."></textarea>
+        </label>
+        <div class="button-row">
+          <button id="generateBtn" class="btn primary xl">Generate standup</button>
+        </div>
+      </section>
+
+      <section class="card insights-card">
+        <div class="section-header">
+          <div>
+            <h2>Activity summary</h2>
+            <p>What the extension found before sending it to Gemini.</p>
+          </div>
+        </div>
+        <div id="activitySummary" class="summary-box empty">No activity loaded yet.</div>
+      </section>
+
+      <section class="card output-card">
+        <div class="section-header">
+          <div>
+            <h2>Standup draft</h2>
+            <p>Editable markdown output.</p>
+          </div>
+          <div class="button-row compact">
+            <button id="copyBtn" class="btn secondary">Copy</button>
+          </div>
+        </div>
+        <textarea id="standupOutput" rows="16" placeholder="Your generated standup draft will appear here."></textarea>
+      </section>
+
+      <details class="card logs-card">
+        <summary class="logs-summary">
+          <span>Status & troubleshooting logs</span>
+          <span class="muted">Expand</span>
+        </summary>
+        <pre id="statusLog" class="log-box"></pre>
+      </details>
+    </div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
